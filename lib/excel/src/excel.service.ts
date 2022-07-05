@@ -31,11 +31,7 @@ export class ExcelService {
    * @param createDataMethod
    * @param sheetName
    */
-  pushResourceToData<T>(
-    resources: T[],
-    createDataMethod: (resource: T) => (string | number)[],
-    sheetName = 'sheet1',
-  ) {
+  pushResourceToData<T>(resources: T[], createDataMethod: (resource: T) => (string | number)[], sheetName = 'sheet1') {
     resources.forEach((resource) => {
       const data = createDataMethod(resource);
       this.xlsxData[sheetName].push(data);
@@ -71,15 +67,9 @@ export class ExcelService {
    * @param filename
    */
   setBasicHeader(res: Response, filename: string) {
-    res.setHeader(
-      'Content-Type',
-      'application/vnd.openxmlformats;charset=utf-8',
-    );
+    res.setHeader('Content-Type', 'application/vnd.openxmlformats;charset=utf-8');
 
-    res.setHeader(
-      'Content-Disposition',
-      `attachment; filename=${encodeURIComponent(filename)}.xlsx`,
-    );
+    res.setHeader('Content-Disposition', `attachment; filename=${encodeURIComponent(filename)}.xlsx`);
   }
 
   writeFile(path: string) {

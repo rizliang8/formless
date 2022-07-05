@@ -1,5 +1,4 @@
-import { Response } from 'express';
-import { Params, PrivatePathService } from './private-path.service';
+import { PrivatePathService, PrivatePathServiceParams } from './';
 
 type SomeConstructor = {
   new (...args: any[]): any;
@@ -7,7 +6,6 @@ type SomeConstructor = {
 
 export interface PrivatePathInterface {
   privatePathService: PrivatePathService;
-  // downloadByDate(date: string, downloadFileName: string, response: Response): Response;
 }
 
 /**
@@ -16,11 +14,9 @@ export interface PrivatePathInterface {
  * @returns
  */
 export const PrivatePath =
-  (data: Params) =>
+  (data: PrivatePathServiceParams) =>
   <T extends SomeConstructor>(constructor: T) => {
     return class g extends constructor {
       privatePathService = new PrivatePathService(data);
-      // downloadFileByDate = this.privatePathService.downloadFileByDate;
-      // downloadZipByDate = this.privatePathService.downloadZipByDate;
     };
   };

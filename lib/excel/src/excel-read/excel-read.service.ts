@@ -9,8 +9,8 @@ export type SheetType = {
 export class ExcelReadService {
   /**
    * Excel time format to Javascript date
-   * @param excelTimestamp 
-   * @returns 
+   * @param excelTimestamp
+   * @returns
    */
   excelTimeToJSDate(excelTimestamp: string) {
     const secondsInDay = 24 * 60 * 60;
@@ -19,8 +19,7 @@ export class ExcelReadService {
     const excelEpochAsUnixTimestamp = excelEpoch.getTime();
     const missingLeapYearDay = secondsInDay * 1000;
     const delta = excelEpochAsUnixTimestamp - missingLeapYearDay;
-    const excelTimestampAsUnixTimestamp =
-      Number(excelTimestamp) * secondsInDay * 1000;
+    const excelTimestampAsUnixTimestamp = Number(excelTimestamp) * secondsInDay * 1000;
 
     const parsed = excelTimestampAsUnixTimestamp + delta;
     console.log('delta', delta, excelTimestampAsUnixTimestamp, parsed);
@@ -30,9 +29,7 @@ export class ExcelReadService {
   }
 
   excelDateToJSDate(excelTimestamp: string) {
-    return new Date(
-      ((Number(excelTimestamp) - 70 * 365 - 19) * 86400 - 8 * 3600) * 1000,
-    );
+    return new Date(((Number(excelTimestamp) - 70 * 365 - 19) * 86400 - 8 * 3600) * 1000);
   }
 
   /**
@@ -110,10 +107,7 @@ export class ExcelReadService {
    * @param titles
    * @param map
    */
-  parseTitleMatchEntity<T>(
-    titles: string[],
-    map?: Record<string, keyof T & string>,
-  ) {
+  parseTitleMatchEntity<T>(titles: string[], map?: Record<string, keyof T & string>) {
     console.log(titles, map);
 
     const set = new Set<number>();

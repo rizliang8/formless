@@ -2,7 +2,7 @@ import fs from 'fs';
 import path from 'path';
 import 'reflect-metadata';
 import { ExcelConf, ExcelConfMethodParams } from '../../src/decorators/excel-conf.decorator';
-import { ExcelParseData } from '../../src/decorators/excel-parse-data.decorator';
+import { SheetToData } from '../../src/decorators/sheet-to-data.decorator';
 
 describe('ExcelMapData', () => {
   it('Test', () => {
@@ -19,7 +19,7 @@ describe('ExcelMapData', () => {
           Column2: 'district',
         },
       })
-      parseExcelData(@ExcelParseData data: any[]) {
+      parseExcelData(@SheetToData data: any[]) {
         return data;
       }
     }

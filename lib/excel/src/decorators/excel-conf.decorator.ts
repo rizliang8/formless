@@ -1,6 +1,6 @@
 import { isUndefined } from '../../../formless/src';
 import { EXCEL_DATA_PARAM_METADATA } from '../constants';
-import { ExcelParserService } from '../excel-parser/excel-parser.service';
+import { ExcelParserService } from '../';
 
 /**
  * Excel data param.

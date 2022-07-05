@@ -1,9 +1,9 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, Injectable, NotFoundException } from '@nestjs/common';
 import { Response } from 'express';
 import { existsSync, mkdirSync, readFileSync } from 'fs';
 import { join, resolve } from 'path';
 
-export type Params = { dirname: string; affix: string; filenamePrefix?: string; datePrefix?: string };
+export type PrivatePathServiceParams = { dirname: string; affix: string; filenamePrefix?: string; datePrefix?: string };
 
 /**
  * privatePath = resolve/private
@@ -19,7 +19,7 @@ export class PrivatePathService {
   private affix: string;
   private filenamePrefix: string;
 
-  constructor(input: Params) {
+  constructor(input: PrivatePathServiceParams) {
     const dirname = input.dirname;
     const affix = input.affix;
     const filenamePrefix = input.filenamePrefix;
@@ -80,24 +80,31 @@ export class PrivatePathService {
     return join(this.getDateDirPath(date), `${this.filenamePrefix}_${date}${this.affix}`);
   }
 
-  downloadZipByDate(date: string, downloadFileName: string, response: Response) {
+  /**
+   *
+   * @param date
+   * @param downloadFileName
+   * @param response
+   * @returns
+   */
+  downloadZipByDate(date: string, downloadFileName: string, res: Response) {
     const zipPath = this.getZipPath(date);
     /**
      * check file exits
      */
     if (!existsSync(zipPath)) {
-      return response.json({
+      return res.json({
         success: false,
-        message: 'File not Found',
+        message: 'File not found',
       });
     }
     /**
      * read file and send to client
      */
     const buffer = readFileSync(zipPath);
-    response.setHeader('Content-Disposition', `attachment; filename=${encodeURIComponent(downloadFileName)}.zip`);
+    res.setHeader('Content-Disposition', `attachment; filename=${encodeURIComponent(downloadFileName)}.zip`);
 
-    return response.send(buffer);
+    return res.send(buffer);
   }
 
   /**
@@ -107,25 +114,27 @@ export class PrivatePathService {
    * @param response
    * @returns
    */
-  downloadFileByDate(date: string, downloadFileName: string, response: Response) {
-    /**
-     * check file exits
-     */
-    if (!existsSync(this.getFilePath(date))) {
-      return response.json({
-        success: false,
-        message: 'File not Found',
-      });
-    }
-    /**
-     * read file and send to client
-     */
-    const buffer = readFileSync(this.getFilePath(date));
-    response.setHeader(
-      'Content-Disposition',
-      `attachment; filename=${encodeURIComponent(downloadFileName)}${this.affix}`,
-    );
+  downloadFileByDate(date: string, downloadFileName: string, res: Response) {
+    try {
+      const filePath = this.getFilePath(date);
+      /**
+       * check file exits
+       */
+      if (!existsSync(filePath)) {
+        return res.json({
+          success: false,
+          message: 'File not found',
+        });
+      }
+      /**
+       * read file and send to client
+       */
+      const buffer = readFileSync(filePath);
+      res.setHeader('Content-Disposition', `attachment; filename=${encodeURIComponent(downloadFileName)}${this.affix}`);
 
-    return response.send(buffer);
+      return res.send(buffer);
+    } catch (err) {
+      console.dir(err);
+    }
   }
 }

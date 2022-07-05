@@ -10,6 +10,10 @@ export class ExcelParserService {
     this.setSheetListByResource(resource);
   }
 
+  setTitles(titles: string[]) {
+    this.titles = titles;
+  }
+
   /**
    * 初始化获取sheetlist实例
    * @param resource
